@@ -1,0 +1,31 @@
+name: darahcepat
+description: A Flutter app for blood donation information.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.9.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.4.0
+  cloud_firestore: ^5.5.0
+  firebase_messaging: ^15.2.10
+  firebase_app_check: ^0.3.2+10
+
+  # UI
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "175166302776",
+    "project_id": "darahcepat-app",
+    "storage_bucket": "darahcepat-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175166302776:android:c3d2550521a538a2e2d4cd",
+        "android_client_info": {
+          "package_name": "com.example.darahcepat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175166302776-u03ra66b7tcfl7ei6g28gp9r63i94q8l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.darahcepat",
+            "certificate_hash": "f03cf48806f98b372b1d0fd29791073a901aec6c"
+          }
+        },
+        {
+          "client_id": "175166302776-6c8skpm58j0fn34v3bakumfalimvsv8d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFzPUeSXC-U7IfL2mSgvF4OLnnX44BXMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175166302776-6c8skpm58j0fn34v3bakumfalimvsv8d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "175166302776-61nvkbmt6rq5levhfiln29m4kh2ujh34.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.darahcepat"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
