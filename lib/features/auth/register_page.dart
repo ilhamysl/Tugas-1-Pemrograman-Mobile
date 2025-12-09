@@ -1,7 +1,7 @@
 // lib/features/auth/register_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:darahcepat/core/services/auth_service.dart';
+import 'package:darahcepat/core/auth_service.dart';
 
 
 class RegisterPage extends StatefulWidget {

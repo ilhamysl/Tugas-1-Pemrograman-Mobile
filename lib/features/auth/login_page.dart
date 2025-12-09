@@ -1,10 +1,9 @@
 // lib/features/auth/login_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:darahcepat/core/services/auth_service.dart';
-import 'package:darahcepat/features/home/admin_home_page.dart';
-import 'package:darahcepat/features/home/user_home_page.dart';
-
+import 'package:darahcepat/core/auth_service.dart';
+import 'package:darahcepat/features/admin/admin_main_page.dart';
+import 'package:darahcepat/features/user/user_main_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,7 +13,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // --- DEFINISI WARNA MERAH KONSISTEN SEBAGAI AKSEN ---
   static const Color appPrimaryRed = Color(0xFFE53935);
 
   final TextEditingController _identifierC = TextEditingController();
@@ -33,9 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     final auth = AuthService();
     final res = await auth.login(
@@ -43,48 +39,45 @@ class _LoginPageState extends State<LoginPage> {
       _passwordC.text.trim(),
     );
 
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() => _isLoading = false);
 
     if (!mounted) return;
 
+    // USER BIASA
     if (res == "user_success") {
-      // User biasa
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => const UserHomePage()),
+        MaterialPageRoute(builder: (_) => const UserMainPage()),
         (route) => false,
       );
       return;
     }
 
+    // EMAIL BELUM VERIFIKASI
     if (res == "unverified") {
-      // User sudah terdaftar tapi email belum terverifikasi.
       Navigator.pushNamed(context, "/verify-pending");
       return;
     }
 
+    // ADMIN
     if (res.startsWith("admin_success|")) {
-      // res format: "admin_success|kode|regionName"
       final parts = res.split("|");
-      final code = parts.length > 1 ? parts[1] : "-";
-      final regionName = parts.length > 2 ? parts[2] : "-";
+      final data = {
+        "code": parts[1],
+        "regionName": parts[2],
+      };
 
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (_) => AdminHomePage(
-            adminCode: code,
-            regionName: regionName,
-          ),
+          builder: (_) => AdminMainPage(adminData: data),
         ),
         (route) => false,
       );
       return;
     }
 
-    // Jika bukan salah satu di atas → dianggap pesan error
+    // ERROR
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(res)),
     );
@@ -100,16 +93,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 80),
-                // Branding Text: Darah Cepat
                 Text(
                   "Darah Cepat",
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.w900, 
-                        color: appPrimaryRed, 
+                        fontWeight: FontWeight.w900,
+                        color: appPrimaryRed,
                         fontSize: 34,
                       ),
                 ),
@@ -117,74 +107,79 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   "Masuk ke Akun Anda",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.grey.shade600,
-                  ),
+                        color: Colors.grey.shade600,
+                      ),
                 ),
                 const SizedBox(height: 48),
-                // Input Email/Kode Admin
+
+                // TextField Email/Kode Admin
                 TextFormField(
                   controller: _identifierC,
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
-                    labelText: "Email / Kode Admin", 
-                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))), 
-                    prefixIcon: Icon(Icons.person_outline, color: appPrimaryRed), 
+                    labelText: "Email / Kode Admin",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    prefixIcon: Icon(Icons.person_outline,
+                        color: appPrimaryRed),
                     filled: true,
-                    fillColor: Color(0xFFF5F5F5), 
+                    fillColor: Color(0xFFF5F5F5),
                   ),
-                  validator: (val) {
-                    if (val == null || val.trim().isEmpty) {
-                      return "Field ini wajib diisi.";
-                    }
-                    return null;
-                  },
+                  validator: (val) =>
+                      (val == null || val.trim().isEmpty)
+                          ? "Field ini wajib diisi."
+                          : null,
                 ),
+
                 const SizedBox(height: 16),
-                // Input Password
+
+                // TextField Password
                 TextFormField(
                   controller: _passwordC,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: "Password",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))), 
-                    prefixIcon: Icon(Icons.lock_outline, color: appPrimaryRed), 
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    prefixIcon: Icon(Icons.lock_outline, color: appPrimaryRed),
                     filled: true,
                     fillColor: Color(0xFFF5F5F5),
                   ),
-                  validator: (val) {
-                    if (val == null || val.trim().isEmpty) {
-                      return "Password wajib diisi.";
-                    }
-                    return null;
-                  },
+                  validator: (val) =>
+                      (val == null || val.trim().isEmpty)
+                          ? "Password wajib diisi."
+                          : null,
                 ),
-                // Lupa Password
+
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () { /* Tambahkan navigasi Lupa Password */ },
+                    onPressed: () {},
                     child: const Text(
                       "Lupa Password?",
-                      style: TextStyle(color: appPrimaryRed, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: appPrimaryRed,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 32),
-                // Tombol Login (Merah solid)
+
+                // TOMBOL LOGIN
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _handleLogin,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: appPrimaryRed, 
+                      backgroundColor: appPrimaryRed,
                       padding: const EdgeInsets.symmetric(vertical: 18),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10), 
-                      ),
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                     child: _isLoading
                         ? const SizedBox(
-                            width: 20, 
+                            width: 20,
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2.5,
@@ -193,28 +188,34 @@ class _LoginPageState extends State<LoginPage> {
                           )
                         : const Text(
                             "Login",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                   ),
                 ),
+
                 const SizedBox(height: 40),
-                // Navigasi ke Register
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Belum punya akun?"),
                     TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/register");
-                      },
+                      onPressed: () =>
+                          Navigator.pushNamed(context, "/register"),
                       child: const Text(
                         "Daftar Sekarang",
-                        style: TextStyle(fontWeight: FontWeight.bold, color: appPrimaryRed),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: appPrimaryRed),
                       ),
-                    ),
+                    )
                   ],
                 ),
-                 const SizedBox(height: 24),
+
+                const SizedBox(height: 24),
               ],
             ),
           ),

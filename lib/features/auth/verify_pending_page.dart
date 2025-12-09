@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:darahcepat/core/services/auth_service.dart';
+import 'package:darahcepat/core/auth_service.dart';
 
 
 class VerifyPendingPage extends StatefulWidget {

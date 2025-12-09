@@ -18,6 +18,10 @@ dependencies:
   cloud_firestore: ^5.5.0
   firebase_messaging: ^15.2.10
   firebase_app_check: ^0.3.2+10
+  http: ^1.2.1
+  flutter_local_notifications: ^17.1.2
+
+  intl: ^0.19.0
 
   # UI
   cupertino_icons: ^1.0.8
